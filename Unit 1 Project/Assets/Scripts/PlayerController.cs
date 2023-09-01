@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     private CharacterController controller;  // The character controller component
     private Vector3 velocity;               // Current velocity of the character
 
+    public AudioSource jumpAudioSource;
+
     // Awake is called when the script instance is initialized
     private void Awake()
     {
@@ -38,6 +40,7 @@ public class PlayerController : MonoBehaviour
         // Jumping
         if (controller.isGrounded && Input.GetButtonDown("Jump"))
         {
+            jumpAudioSource.Play();
             velocity.y = Mathf.Sqrt(jumpForce * -2 * gravity);
         }
 
