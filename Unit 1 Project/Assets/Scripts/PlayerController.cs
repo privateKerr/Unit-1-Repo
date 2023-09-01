@@ -1,35 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+[RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 5f;
-    public float jumpForce = 10f;
-    public float gravity = -9.8f;
-    public Transform groundCheck;
-    public LayerMask groundLayer;
+    // Public variables for customization in the Unity Editor
+    public float moveSpeed = 5f;     // Horizontal movement speed
+    public float jumpForce = 4f;    // Force applied when jumping
+    public float gravity = -9.81f;  // Strength of gravity
 
-    private CharacterController controller;
-    private Vector3 velocity;
-    private bool isGrounded;
-    
+    private CharacterController controller;  // The character controller component
+    private Vector3 velocity;               // Current velocity of the character
+
+    // Awake is called when the script instance is initialized
     private void Awake()
     {
+        // Get the CharacterController component attached to this GameObject
         controller = GetComponent<CharacterController>();
     }
 
+    // Update is called once per frame
     private void Update()
     {
-        isGrounded = Physics.CheckSphere(groundCheck.position, 0.1f, groundLayer);
-
         // Horizontal movement
-        float moveInput = Input.GetAxis("Horizontal");
-        Vector3 moveDirection = new Vector3(moveInput, 0, 0);
-        Vector3 move = transform.TransformDirection(moveDirection) * moveSpeed;
+        var moveInput = Input.GetAxis("Horizontal");
+        var moveDirection = transform.right * (moveInput * moveSpeed);
 
         // Apply gravity
-        if (!isGrounded)
+        if (!controller.isGrounded)
         {
             velocity.y += gravity * Time.deltaTime;
         }
@@ -39,12 +36,13 @@ public class PlayerController : MonoBehaviour
         }
 
         // Jumping
-        if (isGrounded && Input.GetButtonDown("Jump"))
+        if (controller.isGrounded && Input.GetButtonDown("Jump"))
         {
             velocity.y = Mathf.Sqrt(jumpForce * -2 * gravity);
         }
 
         // Apply movement and gravity
-        controller.Move((move + velocity) * Time.deltaTime);
+        var move = moveDirection + velocity;
+        controller.Move(move * Time.deltaTime);
     }
 }
