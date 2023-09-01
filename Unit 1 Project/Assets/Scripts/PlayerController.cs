@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public float jumpForce = 10f;
-    public float gravity = -20f;
+    public float gravity = -9.8f;
     public Transform groundCheck;
     public LayerMask groundLayer;
 
