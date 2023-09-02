@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            velocity.y = 0;
+            velocity.y = gravity * Time.deltaTime;
         }
 
         // Jumping
